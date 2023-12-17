@@ -311,7 +311,7 @@
 //          |         |          |           |          |        +-----------+    +-----------|       |       |           |         |          |           //
     &td2      &kp Z     &kp X      &kp C        &kp V     &kp B     &kp F16          &kp F17    &kp N   &kp M   &kp COMMA   &kp DOT    &kp FSLH     &td3
 //--------------------|          |           |          |        |           |    |           |       |       |           |--------------------------------//  
-                        &td4       &kp LCTRL   &kp LALT  &kp SPACE   &td1              &td0   &kp ENTER  &td5    &kp RCTRL   &kp DEL
+                        &td4       &kp LALT    &kp LCTRL  &kp SPACE   &td1              &td0   &kp ENTER  &td5    &kp RCTRL   &kp DEL
 //                    +----------|-----------|----------|--------------------+    +-----------|-------|--------|-----------|---------+                      //
             >;
         };
