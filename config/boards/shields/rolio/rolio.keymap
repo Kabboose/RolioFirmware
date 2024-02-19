@@ -11,30 +11,14 @@
 #include <dt-bindings/zmk/backlight.h>
 
 
-#define MACOS     0
+#define WINDOWS   0
 #define FKEYS     1
 #define NUMBERS   2
-#define WINDOWS   3
-#define W_FKEYS   4
-#define W_NUMBERS 5
-#define MATHS     6
-#define KB_CONFIG 7
+#define MATHS     3
+#define KB_CONFIG 4
 
 
 / {
-
-    conditional_layers {
-        compatible = "zmk,conditional-layers";
-        win_fkeys {
-            if-layers = <WINDOWS FKEYS>;
-            then-layer = <W_FKEYS>;
-        };
-        win_numbers {
-            if-layers = <WINDOWS NUMBERS>;
-            then-layer = <W_NUMBERS>;
-        };
-    };
-
 
     behaviors {
         // Toggle F-Keys Layer
@@ -69,28 +53,13 @@
             tapping-term-ms = <200>;
             bindings = <&kp RSHFT>, <&caps_word>;
         };
-        // Toggle Windows layer
-        td4: tap_dance_4 {
-            compatible = "zmk,behavior-tap-dance";
-            label = "TAP_DANCE_4";
-            #binding-cells = <0>;
-            tapping-term-ms = <200>;
-            bindings = <&kp LGUI>, <&tog WINDOWS>;
-        };
-        // Toggle Windows layer
-        td5: tap_dance_5 {
-            compatible = "zmk,behavior-tap-dance";
-            label = "TAP_DANCE_5";
-            #binding-cells = <0>;
-            tapping-term-ms = <200>;
-            bindings = <&kp RGUI>, <&tog WINDOWS>;
-        };
+
         // Backspace a whole word when holding backspace
         backspace_word: backspace_word {
             compatible = "zmk,behavior-hold-tap";
             label = "BACKSPACE_WORD";
             #binding-cells = <2>;
-            tapping_term_ms = <135>;
+            tapping_term_ms = <200>;
             quick_tap_ms = <0>;
             flavor = "tap-preferred";
             bindings = <&bsp_word>, <&kp>;
@@ -99,18 +68,12 @@
             compatible = "zmk,behavior-hold-tap";
             label = "WINDOWS_BACKSPACE_WORD";
             #binding-cells = <2>;
-            tapping_term_ms = <135>;
+            tapping_term_ms = <200>;
             quick_tap_ms = <0>;
             flavor = "tap-preferred";
             bindings = <&w_bsp_word>, <&kp>;
         };
-        //Mac OS Zoom
-        mac_zoom: mac_zoom {
-            compatible = "zmk,behavior-sensor-rotate";
-            label = "MAC_ZOOM";
-            #sensor-binding-cells = <0>;
-            bindings = <&zoom_in>, <&zoom_out>;
-        };
+
         //Windows OS Zoom
         win_zoom: win_zoom {
             compatible = "zmk,behavior-sensor-rotate";
@@ -300,33 +263,33 @@
         compatible = "zmk,keymap";
 
         default_layer {
-            label = "Mac OS";
+            label = "Windows";
             sensor-bindings = <&inc_dec_kp UP DOWN &inc_dec_kp LEFT RIGHT>;
             bindings = <
 //---------------------------------------------------------------+                            +---------------------------------------------------------------//
 //          |         |          |           |          |        |                            |       |       |           |         |          |           // 
-  &kp ESCAPE  &kp Q     &kp W      &kp E        &kp R     &kp T                                 &kp Y   &kp U     &kp I      &kp O     &kp P     &backspace_word 0 BSPC
+  &kp ESCAPE  &kp Q     &kp W      &kp E        &kp R     &kp T                                 &kp Y   &kp U     &kp I      &kp O     &kp P     &w_backspace_word 0 BSPC
 //          |         |          |           |          |        |                            |       |       |           |         |          |           //
   &kp TAB     &kp A     &kp S      &kp D        &kp F     &kp G                                 &kp H   &kp J     &kp K      &kp L    &kp SEMI    &kp SQT
 //          |         |          |           |          |        +-----------+    +-----------|       |       |           |         |          |           //
     &td2      &kp Z     &kp X      &kp C        &kp V     &kp B     &kp F16          &kp F17    &kp N   &kp M   &kp COMMA   &kp DOT    &kp FSLH     &td3
 //--------------------|          |           |          |        |           |    |           |       |       |           |--------------------------------//  
-                         &td4      &kp LCTRL   &kp LALT    &td1     &kp SPACE        &kp ENTER   &td0    &td5    &kp RCTRL   &kp DEL
+                        &kp LGUI   &kp LCTRL   &kp LALT    &td1     &kp SPACE        &kp ENTER   &td0  &kp RGUI  &kp RCTRL   &kp DEL
 //                    +----------|-----------|----------|--------------------+    +-----------|-------|--------|-----------|---------+                      //
             >;
         };
 
         f_keys_layer {
             label = "F Keys";
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &mac_zoom>;
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &win_zoom>;
             bindings = <
 //-------------------------------------------------------------------------------+                           +-------------------------------------------------------------------//
 //          |            |            |              |            |              |                           |          |          |           |         |           |           // 
   &kp GRAVE    &kp F1      &kp F2       &kp F3          &kp F4        &kp F5                                   &kp F6    &kp F7      &kp F8     &kp F9    &kp F10     &kp F11
 //          |            |            |              |            |              |                           |          |          |           |         |           |           // 
-  &unindent   &bt BT_PRV   &bt BT_NXT   &kp C_PREV     &kp C_PP     &kp C_NEXT                                 &lstart     &kp UP     &lend      &scrsh    &kp PG_UP   &kp F12
+  &unindent   &bt BT_PRV   &bt BT_NXT   &kp C_PREV     &kp C_PP     &kp C_NEXT                                 &kp HOME     &kp UP     &kp END  &kp PSCRN    &kp PG_UP   &kp F12
 //          |            |            |              |            |              +-------------+    +--------+          |          |           |         |           |           // 
-    &trans    &bl BL_TOG  &bl BL_SET 2  &kp C_VOL_DN   &kp C_MUTE   &kp C_VOL_UP    &kp C_MUTE     &reset_zoom &kp LEFT   &kp DOWN   &kp RIGHT   &scrcr    &kp PG_DN   &kp F13
+    &trans    &bl BL_TOG  &bl BL_SET 2  &kp C_VOL_DN   &kp C_MUTE   &kp C_VOL_UP    &kp C_MUTE     &w_reset_zoom &kp LEFT   &kp DOWN   &kp RIGHT   &wscrcr    &kp PG_DN   &kp F13
 //-----------------------|            |              |            |              |             |    |        |          |          |           |         |-----------------------//  
                             &trans         &trans       &trans        &trans        &trans            &trans    &trans    &trans      &trans     &trans
 //                       +------------|--------------|------------|--------------|-------------+    +--------|----------|----------|-----------|---------+                       //
@@ -344,61 +307,10 @@
 //          |          |                |                 |          |           |                      |           |               |          |          |               |          // 
     &trans    &kp EXCL       &kp AT          &kp HASH       &kp DLLR   &kp PRCNT                          &kp CARET   &kp AMPERSAND   &kp STAR   &kp LPAR     &kp RPAR      &kp FSLH
 //          |          |                |                 |          |           +--------+     +-------|           |               |                     |               |          // 
-   &trans       &pal     &kp LEFT_BRACE   &kp RIGHT_BRACE   &kp PIPE   &kp EQUAL   &trans        &trans   &kp MINUS     &kp PLUS      &kp LBKT   &kp RBKT   &kp BACKSLASH   &kp DOT
+   &trans       &wpal     &kp LEFT_BRACE   &kp RIGHT_BRACE   &kp PIPE   &kp EQUAL   &trans        &trans   &kp MINUS     &kp PLUS      &kp LBKT   &kp RBKT   &kp BACKSLASH   &kp DOT
 //---------------------|                |                 |          |           |        |    |                    |               |          |          |--------------------------//
                             &trans            &trans         &trans     &trans     &trans        &trans    &trans       &trans         &trans     &trans
 //                     +----------------|-----------------|----------|-----------|--------+    +--------|----------|----------------|----------|----------+                          //
-            >;
-        };
-
-        windows_default_layer {
-            label = "Windows";
-            sensor-bindings = <&inc_dec_kp UP DOWN &inc_dec_kp LEFT RIGHT>;
-            bindings = <
-//-----------------------------------------------------------------+                        +------------------------------------------------------------------//
-//          |          |          |          |          |          |                        |          |          |          |          |          |           // 
-    &trans     &trans     &trans     &trans     &trans     &trans                              &trans     &trans     &trans     &trans     &trans     &w_backspace_word 0 BSPC
-//          |          |          |          |          |          |                        |          |          |          |          |          |           //
-    &trans     &trans     &trans     &trans     &trans     &trans                              &trans     &trans     &trans     &trans     &trans     &trans
-//          |          |          |          |          |          +--------+     +---------|          |          |          |          |          |           // 
-    &trans     &trans     &trans     &trans     &trans     &trans    &trans         &trans     &trans     &trans     &trans     &trans     &trans     &trans
-//---------------------|          |          |          |          |        |     |         |          |          |          |          |----------------------//
-                          &trans     &trans     &trans     &trans    &trans         &trans     &trans     &trans     &trans     &trans
-//                     +----------|----------|----------|----------|--------+     +----------|---------|----------|----------|----------+                      //
-            >;
-        };
-
-        windows_fkeys_layer {
-            label = "F Keys";
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &win_zoom>;
-            bindings = <
-//-----------------------------------------------------------------+                        +------------------------------------------------------------------//
-//          |          |          |          |          |          |                        |          |          |          |          |          |           // 
-    &trans     &trans     &trans     &trans     &trans     &trans                              &trans     &trans     &trans     &trans     &trans     &trans
-//          |          |          |          |          |          |                        |          |          |          |          |          |           //
-    &trans     &trans     &trans     &trans     &trans     &trans                             &kp HOME    &trans     &kp END  &kp PSCRN    &trans     &trans
-//          |          |          |          |          |          +--------+     +---------|          |          |          |          |          |           // 
-    &trans     &trans     &trans     &trans     &trans     &trans    &trans      &w_reset_zoom &trans     &trans     &trans     &wscrcr    &trans     &trans
-//---------------------|          |          |          |          |        |     |         |          |          |          |          |----------------------//
-                          &trans     &trans     &trans     &trans    &trans         &trans     &trans     &trans     &trans     &trans
-//                     +----------|----------|----------|----------|--------+     +----------|---------|----------|----------|----------+                      //
-            >;
-        };
-
-        windows_numbers_layer {
-            label = "Numbers";
-            sensor-bindings = <&inc_dec_kp UP DOWN &inc_dec_kp LEFT RIGHT>;
-            bindings = <
-//-----------------------------------------------------------------+                        +------------------------------------------------------------------//
-//          |          |          |          |          |          |                        |          |          |          |          |          |           // 
-    &trans     &trans     &trans     &trans     &trans     &trans                              &trans     &trans     &trans     &trans     &trans     &trans
-//          |          |          |          |          |          |                        |          |          |          |          |          |           //
-    &trans     &trans     &trans     &trans     &trans     &trans                              &trans     &trans     &trans     &trans     &trans     &trans
-//          |          |          |          |          |          +--------+     +---------|          |          |          |          |          |           // 
-    &trans     &wpal      &trans     &trans     &trans     &trans    &trans         &trans     &trans     &trans     &trans     &trans     &trans     &trans
-//---------------------|          |          |          |          |        |     |         |          |          |          |          |----------------------//
-                          &trans     &trans     &trans     &trans    &trans         &trans     &trans     &trans     &trans     &trans
-//                     +----------|----------|----------|----------|--------+     +---------|----------|----------|----------|----------+                      //
             >;
         };
 
